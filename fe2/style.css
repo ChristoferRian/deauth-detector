@@ -1,0 +1,20 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  main {
+    flex: 1;
+  }
+  
+  .deauth-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .deauth-item .badge {
+    font-size: 0.8em;
+  }
+  

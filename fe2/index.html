@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deauth Detector</title>
+  <!-- Bootstrap CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link href="style.css" rel="stylesheet" />  
+</head>
+<body>
+  <header class="bg-primary text-white py-3">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="manufacturer text-start">
+          <div class="fs-5 fw-bold">Muhammad Christofer</div>
+          <div class="fs-5 fw-bold">Rian Nugroho</div>
+        </div>
+        <div class="text-center flex-grow-1">
+          <h1 class="m-0">Deauth Detector</h1>
+        </div>
+        <div class="agency-logo" style="min-width: 200px; text-align: right;">
+          <a href="https://jihs.ac.id" target="_blank" rel="noopener noreferrer"></a>
+          <img src="jihs_new.png" alt="Agency Logo" class="img-fluid" style="max-height: 70px;">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mt-4">
+    <!-- Tombol Start & Stop -->
+    <div class="row mb-3">
+      <div class="col-md-12 text-center">
+        <button id="start-btn" class="btn btn-success me-2">
+          Start Detection
+        </button>
+        <button id="stop-btn" class="btn btn-danger">Stop Detection</button>
+      </div>
+    </div>
+
+    <!-- Card untuk menampilkan pesan deteksi -->
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header">
+            <h2>Detected Deauth Attacks</h2>
+          </div>
+          <div class="card-body">
+            <ul id="deauth-list" class="list-group">
+              <!-- Pesan deauth akan ditambahkan secara dinamis di sini -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-light text-center py-3 mt-4">
+    <!-- <p>&copy; 2025 Deauth Detector. All rights reserved.</p> -->
+  </footer>
+
+  <!-- Bootstrap Bundle dengan Popper -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  ></script>
+  <script src="app.js"></script>
+</body>
+</html>
