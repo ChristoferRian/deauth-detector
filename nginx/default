@@ -1,0 +1,45 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/fe2;
+
+    index index.html index.htm index.nginx-debian.html;
+    # Remove hardcoded IP and use '_' to match any hostname
+    server_name _;
+    
+    location / {
+        try_files $uri $uri/ =404;
+    }
+    
+    # WebSocket proxy configuration
+    location /ws {
+        proxy_pass http://localhost:8000/ws;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # API call proxy configurations
+    location /start {
+        proxy_pass http://localhost:8000/start;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    
+    location /stop {
+        proxy_pass http://localhost:8000/stop;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    
+    # Add a new location block to proxy all API requests
+    location /api/ {
+        proxy_pass http://localhost:8000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
