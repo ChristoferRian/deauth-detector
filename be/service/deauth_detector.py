@@ -23,7 +23,7 @@ class DeauthDetector:
     @staticmethod
     def start():
         if DeauthDetector._is_running:
-            return {"status": "already running"}
+            return {"status": "running"}
         
         cmd = [
             "sudo", "tcpdump",

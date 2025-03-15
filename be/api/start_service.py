@@ -33,6 +33,7 @@ class ConnectionManager:
                 logger.error(f"Error mengirim pesan ke {connection.client}: {e}")
 
 manager = ConnectionManager()
+monitor_status = "idle"
 
 # Endpoint WebSocket untuk menerima pesan secara realtime dari server
 @router.websocket("/ws")
@@ -46,38 +47,31 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
-# HTTP endpoint untuk memulai deteksi
 @router.post("/start", summary="Mulai deteksi paket deauth")
 async def start_detection():
+    global monitor_status
     result = DeauthDetector.start()
     if result.get("status") == "error":
         raise HTTPException(
             status_code=500,
             detail=result.get("message", "Unknown error")
         )
+    # Set status to running
+    monitor_status = "running"
     return {"message": "Deteksi dimulai"}
 
-# HTTP endpoint untuk menghentikan deteksi
+# HTTP endpoint for stopping detection
 @router.post("/stop", summary="Hentikan deteksi paket deauth")
 async def stop_detection():
+    global monitor_status
     result = DeauthDetector.stop()
+    # Set status to idle
+    monitor_status = "idle"
     return {"message": result["status"]}
 
-# Untuk mengirim pesan dari thread deteksi ke WebSocket, kita butuh event loop.
-# Pastikan kita mendapatkan event loop yang aktif.
-try:
-    loop = asyncio.get_event_loop()
-except RuntimeError:
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+# New HTTP endpoint to check the status
+@router.get("/check-status", summary="Check the status of deauth detector")
+async def check_status():
+    global monitor_status
+    return {"status": monitor_status}
 
-def send_ws_callback(message: str):
-    """Callback yang akan mengirim pesan ke semua client WebSocket."""
-    if manager.active_connections:
-        # Jalankan broadcast di event loop utama secara thread-safe
-        asyncio.run_coroutine_threadsafe(manager.broadcast(message), loop)
-    else:
-        logger.info("Tidak ada koneksi websocket aktif untuk mengirim pesan.")
-
-# Set callback ini agar dipanggil oleh DeauthDetector saat ada pesan baru
-DeauthDetector.send_callback = send_ws_callback

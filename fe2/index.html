@@ -31,7 +31,20 @@
   </header>
 
   <main class="container mt-4">
+    
+    <div class="row mb-3">
+      <div class="col-md-12 text-center">
+        <div class="d-inline-block me-2">Status Monitor:</div>
+        <div class="form-check form-switch d-inline-block">
+          <input class="form-check-input" type="checkbox" id="monitor-status-toggle" disabled>
+          <label class="form-check-label" for="monitor-status-toggle">
+            <span id="status-text">Checking...</span>
+          </label>
+        </div>
+      </div>
+    </div>
     <!-- Tombol Start & Stop -->
+    <!-- Toggle Status Monitor -->
     <div class="row mb-3">
       <div class="col-md-12 text-center">
         <button id="start-btn" class="btn btn-success me-2">

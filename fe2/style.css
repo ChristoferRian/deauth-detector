@@ -1,20 +1,42 @@
 body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  main {
-    flex: 1;
-  }
-  
-  .deauth-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .deauth-item .badge {
-    font-size: 0.8em;
-  }
-  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.deauth-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deauth-item .badge {
+  font-size: 0.8em;
+}
+
+/* Custom styles for toggle */
+.form-check-input:checked {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.form-check-input:not(:checked) {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+#status-text {
+  font-weight: bold;
+}
+
+.text-success {
+  color: #198754 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
