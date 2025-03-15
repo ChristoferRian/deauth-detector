@@ -12,7 +12,7 @@ class DeauthDetector:
     _is_running = False
     _thread = None
     # _interface = "wlx00c0cab4e516"
-    _interface = "wlx00c0cab4e516"
+    _interface = "wlx6470020e02d7"
     # Callback untuk mengirim pesan ke websocket (akan di-set dari API)
     send_callback = None
 

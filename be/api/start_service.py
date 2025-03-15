@@ -75,3 +75,19 @@ async def check_status():
     global monitor_status
     return {"status": monitor_status}
 
+try:
+    loop = asyncio.get_event_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+def send_ws_callback(message: str):
+    """Callback yang akan mengirim pesan ke semua client WebSocket."""
+    if manager.active_connections:
+        # Jalankan broadcast di event loop utama secara thread-safe
+        asyncio.run_coroutine_threadsafe(manager.broadcast(message), loop)
+    else:
+        logger.info("Tidak ada koneksi websocket aktif untuk mengirim pesan.")
+
+# Set callback ini agar dipanggil oleh DeauthDetector saat ada pesan baru
+DeauthDetector.send_callback = send_ws_callback
