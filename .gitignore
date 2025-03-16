@@ -1,0 +1,8 @@
+venv
+be/deauth_packets.db
+be/.env
+be/detect.py
+be/tcpdump1.py
+be/__pycache__
+be/api/__pycache__
+be/service/__pycache__

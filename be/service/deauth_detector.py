@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
+import os
 import subprocess
 import threading
 import logging
 import select
-
+from dotenv import load_dotenv
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 class DeauthDetector:
     _process = None
     _is_running = False
     _thread = None
     # _interface = "wlx00c0cab4e516"
-    _interface = "wlx6470020e02d7"
+    _interface = str(os.getenv("INTERFACE"))
     # Callback untuk mengirim pesan ke websocket (akan di-set dari API)
     send_callback = None
 

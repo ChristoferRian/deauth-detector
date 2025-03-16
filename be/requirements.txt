@@ -3,3 +3,4 @@ fastapi
 websockets
 websocket-client
 uvicorn
+dotenv
