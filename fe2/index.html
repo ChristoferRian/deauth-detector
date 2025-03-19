@@ -10,17 +10,20 @@
     rel="stylesheet"
   />
   <link href="style.css" rel="stylesheet" />  
+  <link rel="icon" href=
+  "jihs_new.png"
+          type="image/x-icon" />
 </head>
 <body>
   <header class="bg-primary text-white py-3">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
-        <div class="manufacturer text-start">
+        <div class="manufacturer text-center">
           <div class="fs-5 fw-bold">Muhammad Christofer</div>
           <div class="fs-5 fw-bold">Rian Nugroho</div>
         </div>
         <div class="text-center flex-grow-1">
-          <h1 class="m-0">Deauth Detector</h1>
+          <h3 class="m-0 fw-bold">Sistem Pendeteksi <div class="br"></div>Serangan Deauthentication</h3>
         </div>
         <div class="agency-logo" style="min-width: 200px; text-align: right;">
           <a href="https://jihs.ac.id" target="_blank" rel="noopener noreferrer"></a>
@@ -48,9 +51,9 @@
     <div class="row mb-3">
       <div class="col-md-12 text-center">
         <button id="start-btn" class="btn btn-success me-2">
-          Start Detection
+          Mulai Deteksi
         </button>
-        <button id="stop-btn" class="btn btn-danger">Stop Detection</button>
+        <button id="stop-btn" class="btn btn-danger">Hentikan Deteksi</button>
       </div>
     </div>
 
@@ -59,7 +62,8 @@
       <div class="col-md-8 offset-md-2">
         <div class="card">
           <div class="card-header">
-            <h2>Detected Deauth Attacks</h2>
+            <!-- <h2>Detected Deauth Attacks</h2> -->
+             <h5>Serangan Deauth yang Terdeteksi : <span id="deauth-counter" class="badge bg-primary ms-3">0</span></h5>
           </div>
           <div class="card-body">
             <ul id="deauth-list" class="list-group">
