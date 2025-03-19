@@ -1,3 +1,9 @@
+let deauthCounter = 0;
+function updateDeauthCounter(){
+  const counterElement = document.getElementById("deauth-counter");
+  counterElement.textContent = deauthCounter;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     // Tentukan URL backend secara eksplisit karena FastAPI berjalan di port 8000
     // const backendUrl = "http://localhost:8000";
@@ -173,6 +179,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
       // Add list item to ul
       deauthList.appendChild(li);
+      
+      deauthCounter++;
+      updateDeauthCounter();
     }
   
     // Function to add status message (e.g., start/stop notifications)
