@@ -1,9 +1,3 @@
-let deauthCounter = 0;
-function updateDeauthCounter(){
-  const counterElement = document.getElementById("deauth-counter");
-  counterElement.textContent = deauthCounter;
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     // Tentukan URL backend secara eksplisit karena FastAPI berjalan di port 8000
     // const backendUrl = "http://localhost:8000";
@@ -20,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     let socket;
     // Function to connect to WebSocket
-
+    let deauthCounter = 0;
 
         // Fungsi untuk mengecek status mode monitor
     function checkMonitorStatus() {
@@ -83,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
       socket = new WebSocket(wsUrl);
   
       socket.onopen = function () {
-        console.log("WebSocket connection established.");
+        console.log("Websocket terhubung");
         addStatusMessage("WebSocket terhubung", "success");
       };
   
@@ -158,30 +152,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   
     // Function to add detection message to the list
+    // Function to add detection message to the list
     function addDeauthMessage(message) {
       const deauthList = document.getElementById("deauth-list");
-  
+
       // Create list item element with Bootstrap styling
       const li = document.createElement("li");
       li.className = "list-group-item deauth-item";
-  
+
       // Element for text message
       const messageSpan = document.createElement("span");
       messageSpan.textContent = message + " ";
-  
+
       // Badge element to display the time the message was received
       const badge = document.createElement("span");
       badge.className = "badge bg-secondary";
       badge.textContent = new Date().toLocaleTimeString();
-  
+
       li.appendChild(messageSpan);
       li.appendChild(badge);
-  
+
       // Add list item to ul
       deauthList.appendChild(li);
       
+      // Tambahkan kode berikut untuk menghitung dan memperbarui counter
       deauthCounter++;
-      updateDeauthCounter();
+      console.log(deauthCounter)
+      const counterElement = document.getElementById("deauth-counter");
+      if (counterElement) {
+        counterElement.textContent = deauthCounter;
+      }
     }
   
     // Function to add status message (e.g., start/stop notifications)
