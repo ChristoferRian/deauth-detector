@@ -15,7 +15,7 @@ ORIGINAL_USER_HOME=$(eval echo ~$ORIGINAL_USER)
 
 install_dependency(){
     show_progress "Sedang menginstall Dependency"
-    sudo apt install git nginx network-manager python3-pip python3-venv python3-websockets websocketd
+    sudo apt install git nginx network-manager python3-pip python3-venv python3-websockets websocketd -y
     show_done "Selesai menginstall Dependecy"
 }
 
@@ -79,14 +79,14 @@ server {
     root /var/www/fe2;
 
     index index.html index.htm index.nginx-debian.html;
-    
+    # Remove hardcoded IP and use '_' to match any hostname
     server_name _;
     
     location / {
         try_files $uri $uri/ =404;
     }
     
-    #proxy buat websocket
+    # WebSocket proxy configuration
     location /ws {
         proxy_pass http://localhost:8000/ws;
         proxy_http_version 1.1;
@@ -98,7 +98,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
     
-    #proxy buat api nya
+    # API call proxy configurations
     location /start {
         proxy_pass http://localhost:8000/start;
         proxy_set_header Host $host;
@@ -111,7 +111,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
     }
     
-    # proxy api tapi buat requests
+    # Add a new location block to proxy all API requests
     location /api/ {
         proxy_pass http://localhost:8000/;
         proxy_set_header Host $host;
@@ -144,7 +144,7 @@ adding_cronjob(){
     crontab -l > /tmp/current_crontab 2>/dev/null
 
 # Memeriksa apakah cronjob sudah ada
-    if grep -q "@reboot sleep 15 && bash /var/www/be/run_services.sh" /tmp/current_crontab; then
+    if grep -q "@reboot sleep 15 && bash $ORIGINAL_USER_HOME/deauth-detector/be/run_services.sh" /tmp/current_crontab; then
         echo "Cronjob sudah ada dalam crontab"
     else
     # Menambahkan cronjob baru
@@ -161,14 +161,27 @@ adding_cronjob(){
 
 
 main(){
+    # Ekspor variabel ke environment agar bisa diakses di semua proses
+    export ORIGINAL_USER=$(logname || echo $SUDO_USER || echo $USER)
+    export ORIGINAL_USER_HOME=$(eval echo ~$ORIGINAL_USER)
+    
+    # Simpan variabel-variabel ke file temporary
+    echo "ORIGINAL_USER=$ORIGINAL_USER" > /tmp/deploy_vars
+    echo "ORIGINAL_USER_HOME=$ORIGINAL_USER_HOME" >> /tmp/deploy_vars
+    
     install_dependency
     configure_visudo
 
-    sudo -u $ORIGINAL_USER bash -c "cd $ORIGINAL_USER_HOME && export HOME=$ORIGINAL_USER_HOME && $(declare -f clone_repo show_progress show_done); clone_repo"
-    sudo -u $ORIGINAL_USER bash -c "cd $ORIGINAL_USER_HOME && export HOME=$ORIGINAL_USER_HOME && $(declare -f setup_venv show_progress show_done); setup_venv"
+    # Gunakan source untuk membaca variabel dari file temporary
+    sudo -u $ORIGINAL_USER bash -c "source /tmp/deploy_vars && cd $ORIGINAL_USER_HOME && export HOME=$ORIGINAL_USER_HOME && $(declare -f clone_repo show_progress show_done); clone_repo"
+    sudo -u $ORIGINAL_USER bash -c "source /tmp/deploy_vars && cd $ORIGINAL_USER_HOME && export HOME=$ORIGINAL_USER_HOME && $(declare -f setup_venv show_progress show_done); setup_venv"
 
     configure_nginx
     adding_cronjob
+    
+    # Hapus file temporary
+    rm -f /tmp/deploy_vars
+    
     echo "=== PROSES OTOMASI SELESAI ==="
 }
 
