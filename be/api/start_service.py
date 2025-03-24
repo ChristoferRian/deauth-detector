@@ -49,8 +49,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @router.get("/get_interface", summary="list interface yang tersedia")
 def list_interface():
-    
-    
+    try:
+        interface = DeauthDetector.get_interface_list()
+        logger.info(interface)
+        return {"interface": interface}
+    except Exception as e:
+        logger.error("ada error di api get_interface")
     
 
 @router.post("/start", summary="Mulai deteksi paket deauth")
