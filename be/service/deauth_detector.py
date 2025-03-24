@@ -4,6 +4,7 @@ import subprocess
 import threading
 import logging
 import select
+import re
 from dotenv import load_dotenv
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -18,6 +19,25 @@ class DeauthDetector:
     _interface = str(os.getenv("INTERFACE"))
     # Callback untuk mengirim pesan ke websocket (akan di-set dari API)
     send_callback = None
+    
+    @staticmethod
+    def get_interface_list():
+        try:    
+            command = ["ip", "-br", "a"]
+            run_command = subprocess.run(command, check=True, text=True, capture_output=True)
+            parts = re.split(r'\s{2,}', run_command.stdout.strip())
+            interfaces = []
+            i = 0
+            while i < len(parts):
+                # Nama interface selalu diikuti oleh status (UP/DOWN/UNKNOWN)
+                if i+1 < len(parts) and (parts[i+1] == "UP" or parts[i+1] == "DOWN" or parts[i+1] == "UNKNOWN"):
+                    interfaces.append(parts[i])
+                    i += 3  # Lompat ke kelompok data interface berikutnya
+                else:
+                    i += 1
+            return interfaces
+        except subprocess.SubprocessError as e:
+            logger.info(f"ada masalah pada subrpocess ketika list interface: {e}")
 
     @staticmethod
     def set_interface(interface):

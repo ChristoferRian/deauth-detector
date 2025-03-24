@@ -47,6 +47,12 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
+@router.get("/get_interface", summary="list interface yang tersedia")
+def list_interface():
+    
+    
+    
+
 @router.post("/start", summary="Mulai deteksi paket deauth")
 async def start_detection():
     global monitor_status
